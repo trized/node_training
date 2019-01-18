@@ -18,7 +18,11 @@ app.use((request, response, next) => {
     var log = `${now}: ${request.method} ${request.url}`;
     console.log(log);
 
-    fs.appendFileSync('server.log', log + '\n');
+    fs.appendFileSync('server.log', log + '\n',(err)=>{
+        if(err){
+            console.log('Unable to log server.log');
+        }
+    });
 
     next();
 });
@@ -29,7 +33,7 @@ app.use((request, response, next) => {
 //     });
 // });
 
-// Adding middleware using 'use'
+// Adding middleware using 'use' for setting up static pages in the 'public' folder
 app.use(express.static(__dirname + '/public'));
 
 
@@ -62,6 +66,12 @@ app.get('/about',(request, response)=>{
     response.render('about.hbs',{
         pageTitle: 'Express About Page'
     });
+});
+
+app.get('/projects',(request, response)=>{
+    response.render('projects.hbs',{
+        pageTitle: 'Our Projects'
+    })
 });
 
 // Starts listening to the port 3000
